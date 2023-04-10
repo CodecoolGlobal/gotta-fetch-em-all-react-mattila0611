@@ -6,11 +6,10 @@ function Location(props) {
     const [name, setName] = useState(null);
     const [encounters, setEncounters] = useState(null);
 
-
     useEffect(() => {
         fetch(`https://pokeapi.co/api/v2/location/${id}/`)
         .then(res => res.json())
-        .then(data => setName(data.names[0].name));
+        .then(data => setName(data.names[data.names.length - 1].name));
         fetch(`https://pokeapi.co/api/v2/location-area/${id}/`)
         .then(res => res.json())
         .then(data => setEncounters(data.pokemon_encounters));
