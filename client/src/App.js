@@ -5,13 +5,13 @@ import Encounter from './components/Encounter';
 import { useState } from "react";
 
 function App() {
-  const [location, setLocation] = useState(null);
+  const [area, setArea] = useState(null);
   const [gameState, setGameState] = useState("location");
 
   const renderLocations = () => {
     let ret = [];
     for (let i = 1; i <= 20; i++) {
-      ret.push(<Location key={i} handleClick={() => {setLocation(i); setGameState("random")}} id={i} />);
+      ret.push(<Location key={i} handleClick={() => {setArea(i); setGameState("random")}} id={i} />);
     }
     return ret;
   }
@@ -26,7 +26,7 @@ function App() {
       break;
     case "random":
       return (
-        <RandomEncounter location={location} handleClick={() => setGameState("encounter")}/>
+        <RandomEncounter area={area} handleClick={() => setGameState("encounter")}/>
       )
       break;
     case "encounter":
