@@ -63,6 +63,7 @@ function App() {
           })
 
           Promise.all(fetchUserPokemons).then(resolved => setUsersPokemons(resolved));
+          setPokemonsAvailable(true);
         } else setPokemonsAvailable(false);
       }
       fetchPokemons();
@@ -99,7 +100,7 @@ function App() {
           return (
             <div className="randomizer">
               <h1>No pokemons here...</h1>
-              <button onClick={() => setGameState("location")}>Go back</button>
+              <button onClick={() => {setGameState("location"); setLocationChosen(false)}}>Go back</button>
             </div>
           )
         }
