@@ -1,10 +1,13 @@
 import './App.css';
 import Location from "./components/Location";
-import Encounter from './components/Encounter';
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
+import Countdown from './components/Countdown';
 
 import { useEffect, useState } from "react";
+
+const tickTime = 1;
+const countdownTime = 5;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -14,6 +17,7 @@ function App() {
 
   const [enemyPokemon, setEnemyPokemon] = useState(null);
   const [usersPokemons, setUsersPokemons] = useState(null);
+  const [chosenPokemon, setChosenPokemon] = useState(null);
   const [pokemonsAvailable, setPokemonsAvailable] = useState(true);
 
   const [gameState, setGameState] = useState("location");
@@ -92,10 +96,9 @@ function App() {
                 <div className="usersPokemons">
                   <h1>Choose your pokemon!</h1>
                   {usersPokemons.map((item, i) => (
-                    <UserPokemon key={i} pokemon={item} />
+                    <UserPokemon key={i} handleClick={() => {setChosenPokemon(item); setGameState("prep")}} pokemon={item} />
                   ))}
                 </div>
-                <button onClick={() => setGameState("encounter")}>Continue</button>
               </div>
             )
           } else return <div></div>;
@@ -107,9 +110,13 @@ function App() {
             </div>
           )
         }
+      case "prep":
+        return(
+          <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => setGameState("encounter")}/>
+        )
       case "encounter":
         return (
-          <Encounter />
+          <p>asd</p>
         )
       default:
         break;
