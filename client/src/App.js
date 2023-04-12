@@ -7,7 +7,7 @@ import Countdown from './components/Countdown';
 import { useEffect, useState } from "react";
 
 const tickTime = 1;
-const countdownTime = 5;
+const countdownTime = 2;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -20,6 +20,10 @@ function App() {
   const [chosenPokemon, setChosenPokemon] = useState(null);
   const [pokemonsAvailable, setPokemonsAvailable] = useState(true);
 
+  const [enemyHP, setEnemyHP] = useState(null);
+  const [userHP, setUserHP] = useState(null);
+  const [turn, setTurn] = useState(null);
+
   const [gameState, setGameState] = useState("location");
 
   useEffect(() => {
@@ -30,7 +34,6 @@ function App() {
         const data = await res.json();
         locationArray.push(data);
       }
-      console.log(locationArray);
       setLocations(locationArray);
     }
     fetchLocations();
@@ -67,7 +70,10 @@ function App() {
             return pokemon;
           })
 
-          Promise.all(fetchEnemyPokemons).then(resolved => setEnemyPokemon(resolved[Math.floor(Math.random() * resolved.length)]));
+          const resolved = await Promise.all(fetchEnemyPokemons);
+          const randomPokemon = resolved[Math.floor(Math.random() * resolved.length)];
+          setEnemyPokemon(randomPokemon);
+          setEnemyHP(randomPokemon.stats[0].base_stat);
 
           setPokemonsAvailable(true);
         } else setPokemonsAvailable(false);
@@ -76,6 +82,28 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationChosen])
+
+  useEffect(() => {
+    if (turn) {
+      if (enemyHP > 0 && userHP > 0) {
+        const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
+        return () => {
+          clearTimeout(gameTurnTimer)
+        }
+      } else {
+        setGameState("gameOver");
+        setTurn(null);
+      }
+    }
+  }, [turn])
+
+  function gameTurn() {
+    if (turn === "enemy") {
+      setUserHP(userHP - Math.floor(((((2 / 5 + 2) * enemyPokemon.stats[1].base_stat * 60 / chosenPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
+    } else {
+      setEnemyHP(enemyHP - Math.floor(((((2 / 5 + 2) * chosenPokemon.stats[1].base_stat * 60 / enemyPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
+    }
+  }
 
   if (locations) {
     switch (gameState) {
@@ -96,7 +124,7 @@ function App() {
                 <div className="usersPokemons">
                   <h1>Choose your pokemon!</h1>
                   {usersPokemons.map((item, i) => (
-                    <UserPokemon key={i} handleClick={() => {setChosenPokemon(item); setGameState("prep")}} pokemon={item} />
+                    <UserPokemon key={i} handleClick={() => { setChosenPokemon(item); setUserHP(item.stats[0].base_stat); setGameState("prep") }} pokemon={item} />
                   ))}
                 </div>
               </div>
@@ -111,12 +139,18 @@ function App() {
           )
         }
       case "prep":
-        return(
-          <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => setGameState("encounter")}/>
+        return (
+          <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => { setGameState("encounter"); setTurn("enemy") }} />
         )
       case "encounter":
         return (
-          <p>asd</p>
+          <div>
+            <p>{enemyHP} {userHP}</p>
+          </div>
+        )
+      case "gameOver":
+        return (
+          <p>Game over</p>
         )
       default:
         break;
