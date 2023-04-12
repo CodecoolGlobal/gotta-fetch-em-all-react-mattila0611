@@ -1,25 +1,13 @@
-import { useState, useEffect } from "react";
-
 function Location(props) {
-    const id = props.id;
+    const location = props.location;
     const handleClick = props.handleClick;
 
-    const [name, setName] = useState(null);
-
-    useEffect(() => {
-        fetch(`https://pokeapi.co/api/v2/location/${id}/`)
-        .then(res => res.json())
-        .then(data => setName(data.names[data.names.length - 1].name));
-    },[])
-
-    if(name){
-        return (
-            <div className="location">
-                <p className="title">{name}</p>
-                <button onClick={handleClick}>CHOOSE</button>
-            </div>
-        )
-    } else return;
+    return (
+        <div className="location">
+            <p className="title">{location.names[location.names.length - 1].name}</p>
+            <button onClick={handleClick}>CHOOSE</button>
+        </div>
+    )
 }
 
 export default Location;
