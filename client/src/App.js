@@ -3,6 +3,7 @@ import Location from "./components/Location";
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
 import Countdown from './components/Countdown';
+import BattlePokemon from './components/BattlePokemon';
 
 import { useEffect, useState } from "react";
 
@@ -23,6 +24,7 @@ function App() {
   const [enemyHP, setEnemyHP] = useState(null);
   const [userHP, setUserHP] = useState(null);
   const [turn, setTurn] = useState(null);
+  const [winner, setWinner] = useState(null);
 
   const [gameState, setGameState] = useState("location");
 
@@ -91,6 +93,7 @@ function App() {
           clearTimeout(gameTurnTimer)
         }
       } else {
+        setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
         setGameState("gameOver");
         setTurn(null);
       }
@@ -144,13 +147,19 @@ function App() {
         )
       case "encounter":
         return (
-          <div>
-            <p>{enemyHP} {userHP}</p>
+          <div className='encounter'>
+            <BattlePokemon pokemon={enemyPokemon} hp={enemyHP} />
+            <BattlePokemon pokemon={chosenPokemon} hp={userHP} />
           </div>
         )
       case "gameOver":
         return (
-          <p>Game over</p>
+          <div className='gameOver'>
+            <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
+            <img src={winner.sprites.front_default} alt=''/>
+            {winner.name === chosenPokemon.name ? (<p>{enemyPokemon.name.toUpperCase()} was captured!</p>) : null}
+            <button className='gameOverButton' onClick={() => setGameState("location")}>Start new game</button>
+          </div>
         )
       default:
         break;
