@@ -68,6 +68,7 @@ function App() {
       }
       fetchPokemons();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationChosen])
 
   if (locations) {
@@ -104,11 +105,12 @@ function App() {
             </div>
           )
         }
-        break;
       case "encounter":
         return (
           <Encounter />
         )
+      default:
+        break;
     }
   }
 }
