@@ -6,10 +6,6 @@ import EnemyPokemon from './components/EnemyPokemon';
 
 import { useEffect, useState } from "react";
 
-const usersPokemon = [
-  1, 6, 61
-];
-
 function App() {
   const [locations, setLocations] = useState(null);
   const [areas, setAreas] = useState(null);
@@ -34,6 +30,19 @@ function App() {
       setLocations(locationArray);
     }
     fetchLocations();
+
+    const fetchPokemons = async () => {
+      const res = await fetch(`http://127.0.0.1:4000/api/pokemon`);
+      const data = await res.json();
+      const pokemonDetails = [];
+      data.pokemons.map(async (item) => {
+        const pRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${item}/`);
+        const pData = await pRes.json();
+        pokemonDetails.push(pData)
+      })
+      setUsersPokemons(pokemonDetails);
+    }
+    fetchPokemons()
   }, [])
 
   useEffect(() => {
@@ -56,19 +65,12 @@ function App() {
 
           Promise.all(fetchEnemyPokemons).then(resolved => setEnemyPokemon(resolved[Math.floor(Math.random() * resolved.length)]));
 
-          const fetchUserPokemons = usersPokemon.map(async item => {
-            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${item}/`);
-            const data = await res.json();
-            return data;
-          })
-
-          Promise.all(fetchUserPokemons).then(resolved => setUsersPokemons(resolved));
           setPokemonsAvailable(true);
         } else setPokemonsAvailable(false);
       }
       fetchPokemons();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationChosen])
 
   if (locations) {
@@ -86,7 +88,7 @@ function App() {
           if (enemyPokemon && usersPokemons) {
             return (
               <div className="randomizer">
-                <EnemyPokemon enemyPokemon={enemyPokemon}/>
+                <EnemyPokemon enemyPokemon={enemyPokemon} />
                 <div className="usersPokemons">
                   <h1>Choose your pokemon!</h1>
                   {usersPokemons.map((item, i) => (
@@ -101,7 +103,7 @@ function App() {
           return (
             <div className="randomizer">
               <h1>No pokemons here...</h1>
-              <button onClick={() => {setGameState("location"); setLocationChosen(false)}}>Go back</button>
+              <button onClick={() => { setGameState("location"); setLocationChosen(false) }}>Go back</button>
             </div>
           )
         }
