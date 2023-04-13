@@ -16,7 +16,7 @@ import EnemyBattlePokemon from './components/EnemyBattlePokemon';
 import { useEffect, useState } from "react";
 
 const tickTime = 1.5;
-const countdownTime = 1;
+const countdownTime = 5;
 
 function App() {
   const [locations, setLocations] = useState(null);
