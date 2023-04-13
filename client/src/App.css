@@ -177,6 +177,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 
 .userPokemon p:first-child {
@@ -218,8 +219,8 @@ img {
 
 .countdownEnemy {
   position: absolute;
-  top: 13.6%;
-  left: 10%;
+  top: 14.2%;
+  right: 9%;
 }
 
 .countdownEnemy>img {
@@ -267,7 +268,7 @@ img {
 .countdownUser {
   position: absolute;
   top: 17%;
-  right: 9%;
+  left: 10%;
 }
 
 .countdownUser>img {
@@ -395,6 +396,48 @@ img {
     inset 0 3px 0 3px black,
     0 0 0 3px black,
     inset 0 0 0 3px black;
+}
+
+.userPokemonAttack {
+  animation: userPokemonAttack 1s;
+}
+
+@keyframes userPokemonAttack {
+  0% {
+    left: 7%;
+    bottom: -20%;
+  }
+
+  50% {
+    left: 17%;
+    bottom: -10%;
+  }
+
+  0% {
+    left: 7%;
+    bottom: -20%;
+  }
+}
+
+.enemyPokemonAttack {
+  animation: enemyPokemonAttack 1s;
+}
+
+@keyframes enemyPokemonAttack {
+  0% {
+    right: 13%;
+    bottom: 25%;
+  }
+
+  50% {
+    right: 23%;
+    bottom: 15%;
+  }
+
+  0% {
+    right: 13%;
+    bottom: 25%;
+  }
 }
 
 .gameOverbg {

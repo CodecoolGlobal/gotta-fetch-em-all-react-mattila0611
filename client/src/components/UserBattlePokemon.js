@@ -4,7 +4,7 @@ function UserBattlePokemon(props) {
         <div className="userBattlePokemon">
             <p className="battlePokemonName">{pokemon.name.toUpperCase()}</p>
             <p className="battlePokemonHP">Health: {hp}</p>
-            <img src={pokemon.sprites.back_default} alt=""/>
+            <img className="userBattlePokemonImg" src={pokemon.sprites.back_default} alt=""/>
         </div>
     )
 }
