@@ -1,5 +1,12 @@
+@font-face {
+  font-family: "PokemonFont";   /*Can be any text*/
+  src: local("PokemonFont"),
+    url("./fonts/PokemonFont.ttf") format("truetype");
+}
+
 .App {
   margin: 0;
+  font-family: PokemonFont;
 }
 
 img {

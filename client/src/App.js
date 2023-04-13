@@ -1,4 +1,5 @@
 import './App.css';
+import "./fonts/PokemonFont.ttf"
 import Location from "./components/Location";
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
@@ -122,6 +123,16 @@ function App() {
     }
   }
 
+  function resetGame(){
+    setGameState("location");
+    setLocationChosen(false);
+    setAreas(null);
+    setEnemyPokemon(null);
+    setChosenPokemon(null);
+    setTurn(null);
+    setWinner(null);
+  }
+
   if (locations) {
     switch (gameState) {
       case "location":
@@ -172,7 +183,7 @@ function App() {
             <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
             <img src={winner.sprites.front_default} alt=''/>
             {winner.name === chosenPokemon.name ? (<p>{enemyPokemon.name.toUpperCase()} was captured!</p>) : null}
-            <button className='gameOverButton' onClick={() => setGameState("location")}>Start new game</button>
+            <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
           </div>
         )
       default:
