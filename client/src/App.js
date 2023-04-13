@@ -2,8 +2,10 @@ import './App.css';
 import "./fonts/PokemonFont.ttf";
 import "./fonts/Ketchum.otf";
 import ashImage from "./images/ash.png";
-import pokeballImage from "./images/pokeball.png"
-import openPokeballImage from "./images/open_pokeball.png"
+import pokeballImage from "./images/pokeball.png";
+import openPokeballImage from "./images/open_pokeball.png";
+import ashCryingImage from "./images/ash_crying.png";
+import tombstoneImage from "./images/rip.png";
 import Location from "./components/Location";
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
@@ -91,23 +93,23 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationChosen])
-  
-    useEffect(() => {
-      if (turn) {
-        if (enemyHP > 0 && userHP > 0) {
-          const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
-          return () => {
-            clearTimeout(gameTurnTimer);
-          }
-        } else {
-          enemyHP < 0 ? setEnemyHP(0) : setUserHP(0);
-          setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
-          setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
-          playNextGameState("gameOver");
-          setTurn(null);
+
+  useEffect(() => {
+    if (turn) {
+      if (enemyHP > 0 && userHP > 0) {
+        const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
+        return () => {
+          clearTimeout(gameTurnTimer);
         }
+      } else {
+        enemyHP < 0 ? setEnemyHP(0) : setUserHP(0);
+        setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
+        setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
+        playNextGameState("gameOver");
+        setTurn(null);
       }
-    }, [turn])
+    }
+  }, [turn])
 
   useEffect(() => {
     if (gameState === "gameOver") {
@@ -123,7 +125,7 @@ function App() {
       fetchPokemons();
     }
   }, [gameState])
-  
+
   function gameTurn() {
     if (turn === "enemy") {
       setUserHP(userHP - Math.floor(((((2 / 5 + 2) * enemyPokemon.stats[1].base_stat * 60 / chosenPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
@@ -213,14 +215,13 @@ function App() {
           </div>
         )
       case "gameOver":
-        console.log(enemyPokemon.name, chosenPokemon.name, winner.name)
         return (
           <div className='gameOver'>
             <div className='gameOverbg'></div>
             {winner.name === chosenPokemon.name ? (
               <div className='gameOverWin'>
                 <div className='gameOverMessages'>
-                  <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
+                  <p className="userWon">{winner.name.toUpperCase()} won!</p>
                   <p>{enemyPokemon.name.toUpperCase()} was captured!</p>
                 </div>
                 <img className='loserPokemon' src={enemyPokemon.sprites.front_default} alt='' />
@@ -231,7 +232,18 @@ function App() {
                 <img className='openPokeballImage' src={openPokeballImage} alt='' />
                 <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
               </div>
-            ) : null}
+            ) : (
+              <div className='gameOverLose'>
+                <div className='gameOverMessagesLose'>
+                  <p className="enemyWon">{winner.name.toUpperCase()} won!</p>
+                  <p>{chosenPokemon.name.toUpperCase()} suffered a horrible death!</p>
+                </div>
+                <img className='loserPokemonLose' src={chosenPokemon.sprites.front_default} alt='' />
+                <img className='ashCryingImage' src={ashCryingImage} alt='' />
+                <img className='tombstone' src={tombstoneImage} alt=''/>
+                <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
+              </div>
+            )}
           </div>
         )
       default:
