@@ -23,6 +23,7 @@ app.get("/api/pokemon", (req,res) => {
 })
 
 app.post("/api/pokemon/:id", (req,res) => {
+    const id = parseInt(req.params.id);
     let pokemons = JSON.parse(fs.readFileSync(usersPokemonsRoute, "utf-8"));
     pokemons.pokemons.push(id)
     fs.writeFileSync(usersPokemonsRoute, JSON.stringify(pokemons))

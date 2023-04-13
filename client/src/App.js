@@ -26,6 +26,7 @@ function App() {
   const [userHP, setUserHP] = useState(null);
   const [turn, setTurn] = useState(null);
   const [winner, setWinner] = useState(null);
+  const [loser, setLoser] = useState(null);
 
   const [gameState, setGameState] = useState("location");
 
@@ -95,11 +96,24 @@ function App() {
         }
       } else {
         setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
+        setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
         setGameState("gameOver");
         setTurn(null);
       }
     }
   }, [turn])
+
+  useEffect(() => {
+      if (gameState === "gameOver") {
+        console.log(winner);
+        fetch(`http://127.0.0.1:4000/api/pokemon/:${winner.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        })
+      }
+  }, [gameState])
 
   function gameTurn() {
     if (turn === "enemy") {
