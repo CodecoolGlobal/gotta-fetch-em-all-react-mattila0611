@@ -14,7 +14,6 @@ function Countdown(props){
                 clearTimeout(timeout)
             }
         } else {
-            cb();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[counter])

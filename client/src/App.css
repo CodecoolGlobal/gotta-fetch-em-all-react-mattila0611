@@ -12,6 +12,28 @@ img {
   image-rendering: pixelated;
 }
 
+.transition {
+  position: absolute;
+  opacity: 0%;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.transitionAnimation {
+  animation: transition 3s;
+}
+
+@keyframes transition {
+  0% {opacity: 0%;}
+  40% {opacity: 100%;}
+  100% {opacity: 0%;}
+}
+
 .locations {
   height: 100vh;
   font-family: "PokemonFont";
