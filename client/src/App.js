@@ -15,8 +15,8 @@ import EnemyBattlePokemon from './components/EnemyBattlePokemon';
 
 import { useEffect, useState } from "react";
 
-const tickTime = 0.6;
-const countdownTime = 5;
+const tickTime = 1.5;
+const countdownTime = 1;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -128,9 +128,19 @@ function App() {
 
   function gameTurn() {
     if (turn === "enemy") {
+      document.querySelector(".enemyBattlePokemon").classList.add("enemyPokemonAttack");
       setUserHP(userHP - Math.floor(((((2 / 5 + 2) * enemyPokemon.stats[1].base_stat * 60 / chosenPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
+      const attackTimer = setTimeout(() => document.querySelector(".enemyBattlePokemon").classList.remove("enemyPokemonAttack"), 1000);
+      return () => {
+        clearTimeout(attackTimer);
+      }
     } else {
+      document.querySelector(".userBattlePokemon").classList.add("userPokemonAttack");
       setEnemyHP(enemyHP - Math.floor(((((2 / 5 + 2) * chosenPokemon.stats[1].base_stat * 60 / enemyPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
+      const attackTimer = setTimeout(() => document.querySelector(".userBattlePokemon").classList.remove("userPokemonAttack"), 1000);
+      return () => {
+        clearTimeout(attackTimer);
+      }
     }
   }
 
