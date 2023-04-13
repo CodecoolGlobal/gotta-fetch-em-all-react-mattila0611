@@ -1,15 +1,17 @@
 import './App.css';
 import "./fonts/PokemonFont.ttf"
+import "./fonts/Ketchum.otf"
 import Location from "./components/Location";
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
 import Countdown from './components/Countdown';
-import BattlePokemon from './components/BattlePokemon';
+import UserBattlePokemon from "./components/UserBattlePokemon";
+import EnemyBattlePokemon from './components/EnemyBattlePokemon';
 
 import { useEffect, useState } from "react";
 
-const tickTime = 0.2;
-const countdownTime = 1;
+const tickTime = 1;
+const countdownTime = 5;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -92,12 +94,13 @@ function App() {
       if (enemyHP > 0 && userHP > 0) {
         const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
         return () => {
-          clearTimeout(gameTurnTimer)
+          clearTimeout(gameTurnTimer);
         }
       } else {
+        enemyHP < 0 ? setEnemyHP(0) : setUserHP(0);
         setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
         setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
-        setGameState("gameOver");
+        playNextGameState("gameOver");
         setTurn(null);
       }
     }
@@ -193,14 +196,15 @@ function App() {
       case "prep":
         return (
           <div className='countdown'>
-            <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => { setGameState("encounter"); setTurn("enemy") }} />
+            <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => { playNextGameState("encounter"); setTurn("enemy") }} />
           </div>
         )
       case "encounter":
         return (
           <div className='encounter'>
-            <BattlePokemon pokemon={enemyPokemon} hp={enemyHP} />
-            <BattlePokemon pokemon={chosenPokemon} hp={userHP} />
+            <div className='encounterbg'></div>
+            <EnemyBattlePokemon pokemon={enemyPokemon} hp={enemyHP} />
+            <UserBattlePokemon pokemon={chosenPokemon} hp={userHP} />
           </div>
         )
       case "gameOver":

@@ -1,11 +1,11 @@
-function BattlePokemon(props) {
+function UserBattlePokemon(props) {
     const { pokemon, hp } = props;
     return (
-        <div className="battlePokemon">
+        <div className="userBattlePokemon">
             <p className="battlePokemonName">{pokemon.name.toUpperCase()}</p>
-            <img src={pokemon.sprites.front_default} alt=""/>
             <p className="battlePokemonHP">Health: {hp}</p>
+            <img src={pokemon.sprites.back_default} alt=""/>
         </div>
     )
 }
-export default BattlePokemon
+export default UserBattlePokemon
