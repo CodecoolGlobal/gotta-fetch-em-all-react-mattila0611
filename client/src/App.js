@@ -9,7 +9,7 @@ import BattlePokemon from './components/BattlePokemon';
 import { useEffect, useState } from "react";
 
 const tickTime = 1;
-const countdownTime = 2;
+const countdownTime = 8;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -123,7 +123,7 @@ function App() {
     }
   }
 
-  function resetGame(){
+  function resetGame() {
     setGameState("location");
     setLocationChosen(false);
     setAreas(null);
@@ -147,13 +147,18 @@ function App() {
         if (pokemonsAvailable) {
           if (enemyPokemon && usersPokemons) {
             return (
-              <div className="randomizer">
-                <EnemyPokemon enemyPokemon={enemyPokemon} />
-                <div className="usersPokemons">
-                  <h1>Choose your pokemon!</h1>
-                  {usersPokemons.map((item, i) => (
-                    <UserPokemon key={i} handleClick={() => { setChosenPokemon(item); setUserHP(item.stats[0].base_stat); setGameState("prep") }} pokemon={item} />
-                  ))}
+              <div className='randomizerContainer'>
+                <div className='randomizerbg'></div>
+                <div className="randomizer">
+                  <EnemyPokemon enemyPokemon={enemyPokemon} />
+                  <div className="usersPokemons">
+                    <p>Choose your pokemon!</p>
+                    <div className='userPokemonContainer'>
+                      {usersPokemons.map((item, i) => (
+                        <UserPokemon key={i} handleClick={() => { setChosenPokemon(item); setUserHP(item.stats[0].base_stat); setGameState("prep") }} pokemon={item} />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             )
@@ -168,7 +173,9 @@ function App() {
         }
       case "prep":
         return (
-          <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => { setGameState("encounter"); setTurn("enemy") }} />
+          <div className='countdown'>
+            <Countdown userPokemon={chosenPokemon} enemyPokemon={enemyPokemon} countdownTime={countdownTime} cb={() => { setGameState("encounter"); setTurn("enemy") }} />
+          </div>
         )
       case "encounter":
         return (
@@ -181,7 +188,7 @@ function App() {
         return (
           <div className='gameOver'>
             <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
-            <img src={winner.sprites.front_default} alt=''/>
+            <img src={winner.sprites.front_default} alt='' />
             {winner.name === chosenPokemon.name ? (<p>{enemyPokemon.name.toUpperCase()} was captured!</p>) : null}
             <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
           </div>

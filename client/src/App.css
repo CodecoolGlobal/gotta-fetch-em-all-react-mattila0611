@@ -1,12 +1,11 @@
 @font-face {
   font-family: "PokemonFont";   /*Can be any text*/
-  src: local("PokemonFont"),
+  src: local("PKMN RBYGSC"),
     url("./fonts/PokemonFont.ttf") format("truetype");
 }
 
-.App {
-  margin: 0;
-  font-family: PokemonFont;
+* {
+  font-family: "PokemonFont";
 }
 
 img {
@@ -14,17 +13,252 @@ img {
 }
 
 .locations {
+  height: 100vh;
+  font-family: "PokemonFont";
   display: grid;
   justify-items: center;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  background-image: url("./images/field.jpg");
+}
+
+.location > button {
+  font-family: "PokemonFont";
+  font-weight: bolder;
+  color: white;
+  border-style: none;
+  background-image: url("./images/button.png");
+  height: 30px;
+  background-size: 100% 100%;
 }
 
 .location {
   width: 95%;
-  height: 100px;
+  height: 120px;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  border-style: solid;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.randomizerContainer * {
+  font-family: "PokemonFont";
+}
+
+.randomizerbg {
+  position: relative;
+  background-image: url("./images/battle.jpg");
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.randomizer {
+  position: relative;
+  top: 0px;
+}
+
+.enemyPokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  right: 8vw;
+  bottom: 7vh;
+}
+
+.enemyPokemon > img {
+  width: 25vw;
+}
+
+.enemyPokemon > p {
+  font-size: 20pt;
+  width: 30vw;
+  font-weight: bolder;
+  margin-bottom: 0px;
+  padding: 15px 15px;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.enemyPokemonDetails {
+  padding: 15px 15px;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+  width: fit-content;
+}
+
+.usersPokemons {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 20px;
+  left: 20px;
+}
+
+.usersPokemons > p {
+  font-size: 20pt;
+  width: 30vw;
+  font-weight: bolder;
+  margin-bottom: 40px;
+  padding: 15px 15px;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.userPokemon {
+  margin: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userPokemon p:first-child {
+  font-weight: bolder;
+}
+
+.userPokemonContainer {
+  display: flex;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.countdownbg {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.countdownbg div {
+  position: relative;
+  height: 70vh;
+  background-image: url("./images/vs.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.countdownContainer {
+  background-color: black;
+}
+
+.countdownEnemy {
+  position: absolute;
+  top: 13.6%;
+  left: 10%;
+}
+
+.countdownEnemy > img {
+  height: 40vh;
+}
+
+.countdownEnemyName {
+  display: flex;
+  justify-content: center;
+  font-size: 20pt;
+  width: auto;
+  height: fit-content;
+  font-weight: bolder;
+  margin-bottom: 40px;
+  padding: 15px 15px;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.countdownEnemyName > p {
+  margin: 0;
+}
+
+.countdownEnemyDetails {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.countdownEnemyDetails p {
+  margin: 8px 0 5px 0;
+  font-weight: bolder;
+}
+
+.countdownUser {
+  position: absolute;
+  top: 17%;
+  right: 9%;
+}
+
+.countdownUser > img {
+  height: 40vh;
+}
+
+.countdownUserName {
+  display: flex;
+  justify-content: center;
+  font-size: 20pt;
+  width: auto;
+  height: fit-content;
+  font-weight: bolder;
+  margin-bottom: 40px;
+  padding: 15px 15px;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.countdownUserName > p {
+  margin: 0;
+}
+
+.countdownUserDetails {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: white;
+  border:3px solid white;
+  box-shadow: 0 3px 0 3px black,
+              inset 0 3px 0 3px black,
+              0 0 0 3px black,
+              inset 0 0 0 3px black;
+}
+
+.countdownUserDetails p {
+  margin: 8px 0 5px 0;
+  font-weight: bolder;
 }

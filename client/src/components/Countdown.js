@@ -14,13 +14,13 @@ function Countdown(props){
                 clearTimeout(timeout)
             }
         } else {
-            cb();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[counter])
 
     return (
         <div className="countdownContainer">
+            <div className="countdownbg"><div></div></div>
             <CountdownEnemy enemyPokemon={enemyPokemon}/>
             <p>{counter}</p>
             <CountdownUser userPokemon={userPokemon}/>
