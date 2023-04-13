@@ -1,6 +1,9 @@
 import './App.css';
-import "./fonts/PokemonFont.ttf"
-import "./fonts/Ketchum.otf"
+import "./fonts/PokemonFont.ttf";
+import "./fonts/Ketchum.otf";
+import ashImage from "./images/ash.png";
+import pokeballImage from "./images/pokeball.png"
+import openPokeballImage from "./images/open_pokeball.png"
 import Location from "./components/Location";
 import UserPokemon from './components/UserPokemon';
 import EnemyPokemon from './components/EnemyPokemon';
@@ -10,7 +13,7 @@ import EnemyBattlePokemon from './components/EnemyBattlePokemon';
 
 import { useEffect, useState } from "react";
 
-const tickTime = 1;
+const tickTime = 0.6;
 const countdownTime = 5;
 
 function App() {
@@ -32,6 +35,18 @@ function App() {
 
   const [gameState, setGameState] = useState("location");
 
+  async function fetchPokemons() {
+    const res = await fetch(`http://127.0.0.1:4000/api/pokemon`);
+    const data = await res.json();
+    const pokemonDetails = [];
+    data.pokemons.map(async (item) => {
+      const pRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${item}/`);
+      const pData = await pRes.json();
+      pokemonDetails.push(pData)
+    })
+    setUsersPokemons(pokemonDetails);
+  }
+
   useEffect(() => {
     const fetchLocations = async () => {
       const locationArray = [];
@@ -43,19 +58,7 @@ function App() {
       setLocations(locationArray);
     }
     fetchLocations();
-
-    const fetchPokemons = async () => {
-      const res = await fetch(`http://127.0.0.1:4000/api/pokemon`);
-      const data = await res.json();
-      const pokemonDetails = [];
-      data.pokemons.map(async (item) => {
-        const pRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${item}/`);
-        const pData = await pRes.json();
-        pokemonDetails.push(pData)
-      })
-      setUsersPokemons(pokemonDetails);
-    }
-    fetchPokemons()
+    fetchPokemons();
   }, [])
 
   useEffect(() => {
@@ -88,27 +91,26 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationChosen])
-
-  useEffect(() => {
-    if (turn) {
-      if (enemyHP > 0 && userHP > 0) {
-        const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
-        return () => {
-          clearTimeout(gameTurnTimer);
+  
+    useEffect(() => {
+      if (turn) {
+        if (enemyHP > 0 && userHP > 0) {
+          const gameTurnTimer = setTimeout(() => { setTurn(turn === "enemy" ? "user" : "enemy"); gameTurn() }, tickTime * 1000);
+          return () => {
+            clearTimeout(gameTurnTimer);
+          }
+        } else {
+          enemyHP < 0 ? setEnemyHP(0) : setUserHP(0);
+          setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
+          setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
+          playNextGameState("gameOver");
+          setTurn(null);
         }
-      } else {
-        enemyHP < 0 ? setEnemyHP(0) : setUserHP(0);
-        setWinner(enemyHP < 1 ? chosenPokemon : enemyPokemon);
-        setLoser(enemyHP < 1 ? enemyPokemon : chosenPokemon);
-        playNextGameState("gameOver");
-        setTurn(null);
       }
-    }
-  }, [turn])
+    }, [turn])
 
   useEffect(() => {
     if (gameState === "gameOver") {
-      console.log(loser);
       fetch(`http://127.0.0.1:4000/api/pokemon/${loser.id}`, {
         method: "POST",
         mode: "cors",
@@ -117,8 +119,11 @@ function App() {
         },
       })
     }
+    if (gameState === "location") {
+      fetchPokemons();
+    }
   }, [gameState])
-
+  
   function gameTurn() {
     if (turn === "enemy") {
       setUserHP(userHP - Math.floor(((((2 / 5 + 2) * enemyPokemon.stats[1].base_stat * 60 / chosenPokemon.stats[2].base_stat) / 50) + 2) * (Math.floor(Math.random() * (255 - 217 + 1)) + 217) / 255))
@@ -189,7 +194,7 @@ function App() {
           return (
             <div className="randomizer">
               <h1>No pokemons here...</h1>
-              <button onClick={() => { setGameState("location"); setLocationChosen(false) }}>Go back</button>
+              <button onClick={() => { playNextGameState("location"); setLocationChosen(false) }}>Go back</button>
             </div>
           )
         }
@@ -208,12 +213,25 @@ function App() {
           </div>
         )
       case "gameOver":
+        console.log(enemyPokemon.name, chosenPokemon.name, winner.name)
         return (
           <div className='gameOver'>
-            <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
-            <img src={winner.sprites.front_default} alt='' />
-            {winner.name === chosenPokemon.name ? (<p>{enemyPokemon.name.toUpperCase()} was captured!</p>) : null}
-            <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
+            <div className='gameOverbg'></div>
+            {winner.name === chosenPokemon.name ? (
+              <div className='gameOverWin'>
+                <div className='gameOverMessages'>
+                  <p className={winner.name === chosenPokemon.name ? "userWon" : "enemyWon"}>{winner.name.toUpperCase()} won!</p>
+                  <p>{enemyPokemon.name.toUpperCase()} was captured!</p>
+                </div>
+                <img className='loserPokemon' src={enemyPokemon.sprites.front_default} alt='' />
+                <div className='ash'>
+                  <img className='ashImage' src={ashImage} alt='' />
+                  <img className='pokeball' src={pokeballImage} alt="" />
+                </div>
+                <img className='openPokeballImage' src={openPokeballImage} alt='' />
+                <button className='gameOverButton' onClick={() => resetGame()}>Start new game</button>
+              </div>
+            ) : null}
           </div>
         )
       default:
