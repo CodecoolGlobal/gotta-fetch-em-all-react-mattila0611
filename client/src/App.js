@@ -8,8 +8,8 @@ import BattlePokemon from './components/BattlePokemon';
 
 import { useEffect, useState } from "react";
 
-const tickTime = 1;
-const countdownTime = 8;
+const tickTime = 0.2;
+const countdownTime = 1;
 
 function App() {
   const [locations, setLocations] = useState(null);
@@ -105,9 +105,10 @@ function App() {
 
   useEffect(() => {
       if (gameState === "gameOver") {
-        console.log(winner);
-        fetch(`http://127.0.0.1:4000/api/pokemon/:${winner.id}`, {
+        console.log(loser);
+        fetch(`http://127.0.0.1:4000/api/pokemon/${loser.id}`, {
           method: "POST",
+          mode: "cors",
           headers: {
             "Content-Type": "application/json"
           },
@@ -131,6 +132,7 @@ function App() {
     setChosenPokemon(null);
     setTurn(null);
     setWinner(null);
+    setLoser(null);
   }
 
   if (locations) {
