@@ -104,16 +104,16 @@ function App() {
   }, [turn])
 
   useEffect(() => {
-      if (gameState === "gameOver") {
-        console.log(loser);
-        fetch(`http://127.0.0.1:4000/api/pokemon/${loser.id}`, {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json"
-          },
-        })
-      }
+    if (gameState === "gameOver") {
+      console.log(loser);
+      fetch(`http://127.0.0.1:4000/api/pokemon/${loser.id}`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+    }
   }, [gameState])
 
   function gameTurn() {
@@ -135,13 +135,30 @@ function App() {
     setLoser(null);
   }
 
+  function transition() {
+    const transitionDiv = document.querySelector(".transition");
+    transitionDiv.classList.add("transitionAnimation");
+    const timer = setTimeout(() => transitionDiv.classList.remove("transitionAnimation"), 3000);
+    return () => {
+      clearTimeout(timer)
+    }
+  }
+
+  function playNextGameState(state) {
+    const timer = setTimeout(() => setGameState(state), 1200);
+    transition();
+    return () => {
+      clearTimeout(timer)
+    }
+  }
+
   if (locations) {
     switch (gameState) {
       case "location":
         return (
           <div className="locations">
             {locations.map((loc, i) => (
-              <Location key={i} location={loc} handleClick={() => { setAreas(loc.areas); setGameState("random"); setLocationChosen(true) }} />
+              <Location key={i} location={loc} handleClick={() => { setAreas(loc.areas); setLocationChosen(true); playNextGameState("random"); }} />
             ))}
           </div>
         )
@@ -157,7 +174,7 @@ function App() {
                     <p>Choose your pokemon!</p>
                     <div className='userPokemonContainer'>
                       {usersPokemons.map((item, i) => (
-                        <UserPokemon key={i} handleClick={() => { setChosenPokemon(item); setUserHP(item.stats[0].base_stat); setGameState("prep") }} pokemon={item} />
+                        <UserPokemon key={i} handleClick={() => { setChosenPokemon(item); setUserHP(item.stats[0].base_stat); playNextGameState("prep") }} pokemon={item} />
                       ))}
                     </div>
                   </div>
