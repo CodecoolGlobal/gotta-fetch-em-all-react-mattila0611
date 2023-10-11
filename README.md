@@ -11,7 +11,7 @@
 <h3 align="center">Pokémon Duel</h3>
 
   <p align="center">
-    A MERN stack-powered Pokémon Duel & Capture game. Experience Pokémon duels on the quest to capture and collect a variety of Pokémon species in this browser game.
+    A ExpressJS and React powered Pokémon Duel & Capture game. Experience Pokémon duels on the quest to capture and collect a variety of Pokémon species in this browser game.
   </p>
 </div>
 
